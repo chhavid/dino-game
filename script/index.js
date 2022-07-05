@@ -39,18 +39,25 @@ const drawDino = (dino) => {
   dinoElement.style.left = dino.position.x;
 };
 
-const createObstacle = (obstacle) => {
+const styleObstacle = (obstacleElement, obstacle) => {
   const { height, width } = obstacle.info;
-  const canvas = document.getElementById('canvas');
-  const obstacleElement = document.createElement('div');
-  const image = document.createElement('img');
-  image.src = 'images/obstacle.webp';
-  obstacleElement.appendChild(image);
-
   obstacleElement.id = 'obstacle';
   obstacleElement.style.height = height;
   obstacleElement.style.width = width;
+};
+
+const addObstacle = (obstacleElement, canvas) => {
+  const image = document.createElement('img');
+  image.src = 'images/obstacle.webp';
+  obstacleElement.appendChild(image);
   canvas.appendChild(obstacleElement);
+};
+
+const createObstacle = (obstacle) => {
+  const canvas = document.getElementById('canvas');
+  const obstacleElement = document.createElement('div');
+  addObstacle(obstacleElement, canvas);
+  styleObstacle(obstacleElement, obstacle);
 };
 
 const addScore = () => {
@@ -89,6 +96,13 @@ const removeObstacle = (obstacle) => {
   obstacleElement.remove();
 };
 
+const maintainObstacle = (obstacle, obstacleInfo) => {
+  removeObstacle(obstacle);
+  obstacle = new Obstacle(obstacleInfo);
+  createObstacle(obstacle);
+  return obstacle;
+};
+
 const startGame = () => {
   const dino = {
     position: { x: 60, y: 0 },
@@ -108,9 +122,7 @@ const startGame = () => {
   const game = setInterval(() => {
     if (obstacle.hasReachedEnd()) {
       addScore();
-      removeObstacle(obstacle);
-      obstacle = new Obstacle(obstacleInfo);
-      createObstacle(obstacle);
+      obstacle = maintainObstacle(obstacle, obstacleInfo);
     }
     drawDino(dino);
     if (obstacle.hasHit(dino)) {
