@@ -53,6 +53,11 @@ const createObstacle = (obstacle) => {
   canvas.appendChild(obstacleElement);
 };
 
+const addScore = () => {
+  const score = document.getElementById('score');
+  score.innerText++;
+};
+
 const drawObstacle = (obstacle) => {
   const { position: { x, y } } = obstacle.info;
   const obstacleElement = document.getElementById('obstacle');
@@ -60,13 +65,18 @@ const drawObstacle = (obstacle) => {
   obstacleElement.style.left = x;
 };
 
+const canJump = ({ position, jumpHeight }, key) => {
+  return (key === 32 || key === 38)
+    && position.y < jumpHeight;
+};
+
 const jump = (dino, event) => {
   const key = event.keyCode;
-  if (key === 32 || key === 38) {
+  if (canJump(dino, key)) {
     dino.position.y += dino.jumpHeight;
     setTimeout(() => {
       dino.position.y -= dino.jumpHeight;
-    }, 400)
+    }, 300)
   }
 };
 
@@ -97,6 +107,7 @@ const startGame = () => {
   createObstacle(obstacle);
   const game = setInterval(() => {
     if (obstacle.hasReachedEnd()) {
+      addScore();
       removeObstacle(obstacle);
       obstacle = new Obstacle(obstacleInfo);
       createObstacle(obstacle);
