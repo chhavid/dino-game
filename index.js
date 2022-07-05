@@ -15,6 +15,13 @@ class Obstacle {
     return this.x + this.width <= 0;
   }
 
+  hasHit(dino) {
+    const { position: { x, y }, height, width } = dino;
+    return x + width >= this.x &&
+      x <= this.x + this.width &&
+      y <= this.y + this.height;
+  }
+
   get info() {
     return {
       height: this.height,
@@ -85,13 +92,17 @@ const startGame = () => {
 
   let obstacle = new Obstacle(obstacleInfo);
   createObstacle(obstacle);
-  setInterval(() => {
+  const game = setInterval(() => {
     if (obstacle.hasReachedEnd()) {
       removeObstacle(obstacle);
       obstacle = new Obstacle(obstacleInfo);
       createObstacle(obstacle);
     }
     drawDino(dino);
+    if (obstacle.hasHit(dino)) {
+      clearInterval(game);
+      return;
+    }
     obstacle.move();
     drawObstacle(obstacle);
   }, 40);

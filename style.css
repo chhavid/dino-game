@@ -16,7 +16,7 @@ body {
   position: absolute;
   bottom: 0px;
   left: 500px;
-  transition: 100ms ease;
+  transition: 80ms ease;
 }
 
 #game {
