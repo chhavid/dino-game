@@ -1,0 +1,36 @@
+body {
+  width: 960px;
+  margin: 100px auto;
+}
+
+#dino {
+  background-color: gray;
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  transition: 100ms ease;
+}
+
+#obstacle {
+  background-color: red;
+  position: absolute;
+  bottom: 0px;
+  left: 500px;
+  transition: 100ms ease;
+}
+
+#game {
+  border: 1px solid black;
+  height: 480px;
+  overflow: hidden;
+}
+
+#sky {
+  position: relative;
+  height: 70%;
+}
+
+#floor {
+  height: 30%;
+  border-top: 1px solid black;
+}
