@@ -12,11 +12,19 @@ body {
 }
 
 #obstacle {
-  background-color: red;
   position: absolute;
   bottom: 0px;
   left: 500px;
   transition: 80ms ease;
+}
+
+#obstacle>img {
+  width: 100%;
+}
+
+#dino>img {
+  /* width: 100%; */
+  height: 100%;
 }
 
 #game {
@@ -25,7 +33,7 @@ body {
   overflow: hidden;
 }
 
-#sky {
+#canvas {
   position: relative;
   height: 70%;
 }

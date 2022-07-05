@@ -41,13 +41,16 @@ const drawDino = (dino) => {
 
 const createObstacle = (obstacle) => {
   const { height, width } = obstacle.info;
-  const sky = document.getElementById('sky');
+  const canvas = document.getElementById('canvas');
   const obstacleElement = document.createElement('div');
+  const image = document.createElement('img');
+  image.src = 'images/obstacle.webp';
+  obstacleElement.appendChild(image);
 
   obstacleElement.id = 'obstacle';
   obstacleElement.style.height = height;
   obstacleElement.style.width = width;
-  sky.appendChild(obstacleElement);
+  canvas.appendChild(obstacleElement);
 };
 
 const drawObstacle = (obstacle) => {
@@ -63,7 +66,7 @@ const jump = (dino, event) => {
     dino.position.y += dino.jumpHeight;
     setTimeout(() => {
       dino.position.y -= dino.jumpHeight;
-    }, 300)
+    }, 400)
   }
 };
 
@@ -80,14 +83,14 @@ const startGame = () => {
   const dino = {
     position: { x: 60, y: 0 },
     height: 60,
-    width: 30,
+    width: 40,
     jumpHeight: 100
   }
   const obstacleInfo = {
     position: { x: 1000, y: 0 },
     height: 50,
     width: 30,
-    speed: 10
+    speed: 15
   };
 
   let obstacle = new Obstacle(obstacleInfo);
