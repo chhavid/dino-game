@@ -11,14 +11,14 @@ body {
   transition: 100ms ease;
 }
 
-#obstacle {
+.obstacle {
   position: absolute;
   bottom: 0px;
   left: 500px;
   transition: 80ms ease;
 }
 
-#obstacle>img {
+.obstacle>img {
   width: 100%;
 }
 
