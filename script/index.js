@@ -51,16 +51,20 @@ const hasReachedEnd = (obstacle) => {
   return obstacle.position.x + obstacle.width <= 0;
 };
 
-const removeObstacle = (obstacle) => {
-  const obstacleElement = document.getElementById('obstacle');
-  obstacleElement.remove();
+const isObstacleGone = (obstacleElement) => {
+  const pos = + obstacleElement.style.left.slice(0, -2);
+  const width = + obstacleElement.style.width.slice(0, -2);
+  return pos + width < 0;
 };
 
-const maintainObstacle = (obstacle, obstacleInfo) => {
-  removeObstacle(obstacle);
-  obstacle = new Obstacle(obstacleInfo);
-  createObstacle(obstacle);
-  return obstacle;
+const maintainObstacle = () => {
+  const obstacleElements = document.getElementsByClassName('obstacle');
+  for (const obstacleElement of obstacleElements) {
+
+    if (isObstacleGone(obstacleElement)) {
+      obstacleElement.remove();
+    }
+  }
 };
 
 const drawGame = ({ dino, score, obstacles }) => {
@@ -72,6 +76,7 @@ const drawGame = ({ dino, score, obstacles }) => {
       createObstacle(obstacle);
     }
     updateObstacle(obstacle);
+    maintainObstacle(obstacle);
   });
 };
 
