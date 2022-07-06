@@ -1,3 +1,45 @@
+const getObstacleInfo = () => ({
+  position: { x: 1000, y: 0 },
+  height: 50,
+  width: 30,
+  speed: 15
+});
+
+class Game {
+  constructor(dino) {
+    this.dino = dino
+    this.obstacles = [];
+    this.score = 0;
+  }
+
+  #canJump(key) {
+    const { position: { y }, jumpHeight } = this.dino;
+    return (key === 32 || key === 38) && y < jumpHeight;
+  };
+
+  dinoJump({ keyCode }) {
+    let { position, jumpHeight } = this.dino;
+    if (this.#canJump(keyCode)) {
+      position.y += jumpHeight;
+      setTimeout(() => {
+        position.y -= jumpHeight;
+      }, 300)
+    }
+  }
+
+  addScore() {
+    this.score++;
+  }
+
+  get info() {
+    return {
+      dino: this.dino,
+      score: this.score,
+    }
+  }
+
+}
+
 class Obstacle {
   constructor({ position, height, width, speed }) {
     this.x = position.x;
@@ -60,9 +102,9 @@ const createObstacle = (obstacle) => {
   styleObstacle(obstacleElement, obstacle);
 };
 
-const addScore = () => {
-  const score = document.getElementById('score');
-  score.innerText++;
+const updateScore = (score) => {
+  const scoreElement = document.getElementById('score');
+  scoreElement.innerText = score;
 };
 
 const drawObstacle = (obstacle) => {
@@ -70,21 +112,6 @@ const drawObstacle = (obstacle) => {
   const obstacleElement = document.getElementById('obstacle');
   obstacleElement.style.bottom = y;
   obstacleElement.style.left = x;
-};
-
-const canJump = ({ position, jumpHeight }, key) => {
-  return (key === 32 || key === 38)
-    && position.y < jumpHeight;
-};
-
-const jump = (dino, event) => {
-  const key = event.keyCode;
-  if (canJump(dino, key)) {
-    dino.position.y += dino.jumpHeight;
-    setTimeout(() => {
-      dino.position.y -= dino.jumpHeight;
-    }, 300)
-  }
 };
 
 const hasReachedEnd = (obstacle) => {
@@ -110,30 +137,30 @@ const startGame = () => {
     width: 40,
     jumpHeight: 100
   }
-  const obstacleInfo = {
-    position: { x: 1000, y: 0 },
-    height: 50,
-    width: 30,
-    speed: 15
-  };
+
+  const game = new Game(dino);
+  const obstacleInfo = getObstacleInfo();
 
   let obstacle = new Obstacle(obstacleInfo);
   createObstacle(obstacle);
-  const game = setInterval(() => {
+  const intervalId = setInterval(() => {
     if (obstacle.hasReachedEnd()) {
-      addScore();
+      game.addScore();
+      updateScore(game.info.score);
       obstacle = maintainObstacle(obstacle, obstacleInfo);
     }
-    drawDino(dino);
-    if (obstacle.hasHit(dino)) {
-      clearInterval(game);
+    drawDino(game.info.dino);
+    if (obstacle.hasHit(game.info.dino)) {
+      clearInterval(intervalId);
       return;
     }
     obstacle.move();
     drawObstacle(obstacle);
   }, 40);
 
-  window.addEventListener('keydown', (event) => jump(dino, event));
+  window.addEventListener('keydown', (event) => {
+    game.dinoJump(event);
+  });
 };
 
 window.onload = startGame;
